@@ -277,38 +277,86 @@
   .mf-item.prop { background: #fce4ec; border-color: #c0392b; color: #922b21; }
 
   /* Mentefacto Nocional */
-  .mf-nocional {
-    background: var(--blanco); border-radius: 10px;
-    padding: 2.5rem; box-shadow: var(--sombra);
-  }
-  .mf-nocional-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
-    border: 2px solid var(--negro); border-radius: 6px; overflow: hidden;
-  }
-  .mf-noc-cell {
-    padding: 1rem; border-right: 2px solid var(--negro);
-    border-bottom: 2px solid var(--negro);
-  }
-  .mf-noc-cell:nth-child(3n) { border-right: none; }
-  .mf-noc-cell:nth-last-child(-n+3) { border-bottom: none; }
-  .mf-noc-cell.header {
-    background: var(--negro); color: var(--blanco);
-    font-family: 'Space Mono', monospace; font-size: 0.7rem;
-    text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
-  }
-  .mf-noc-cell.ley1 { background: rgba(192,57,43,0.08); }
-  .mf-noc-cell.ley2 { background: rgba(243,156,18,0.08); }
-  .mf-noc-cell.ley3 { background: rgba(39,174,96,0.1); }
-  .mf-noc-cell h4 {
-    font-family: 'Playfair Display', serif; font-size: 0.95rem;
-    margin-bottom: 0.4rem; font-weight: 700;
-  }
-  .mf-noc-cell p { font-size: 0.82rem; color: #555; line-height: 1.5; }
-  .mf-noc-cell .formula-small {
-    font-family: 'Space Mono', monospace; font-size: 0.82rem;
-    color: var(--rojo); margin-top: 0.4rem; font-weight: 700;
-  }
+<div class="mentefacto-section">
+  <h3>Mentefacto Nocional</h3>
+  <p class="sub">Representación de las Leyes de Newton según la estructura mostrada.</p>
 
+  <div class="mf-nocional">
+
+    <div style="
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      gap:3rem;
+      flex-wrap:wrap;
+    ">
+
+      <!-- Figura -->
+      <div style="display:flex; flex-direction:column; align-items:center;">
+
+        <div style="
+          width:0;
+          height:0;
+          border-left:150px solid transparent;
+          border-right:150px solid transparent;
+          border-bottom:350px solid #fff;
+          position:relative;
+        ">
+          <div style="
+            position:absolute;
+            top:120px;
+            left:-20px;
+            text-align:center;
+            font-size:1.8rem;
+            font-weight:bold;
+            line-height:1.8;
+          ">
+            X1<br>
+            X2<br>
+            X3<br>
+            X4
+          </div>
+        </div>
+
+        <div style="
+          border:6px solid black;
+          width:300px;
+          text-align:center;
+          padding:20px;
+          font-size:2rem;
+          font-weight:bold;
+          background:white;
+        ">
+          Leyes de Newton
+        </div>
+
+      </div>
+
+      <!-- Descripción -->
+      <div style="
+        max-width:500px;
+        font-size:1.1rem;
+        line-height:2;
+      ">
+
+        <p><strong>X1:</strong> Un cuerpo en reposo o MRU permanece así si la fuerza neta es cero.</p>
+
+        <p><strong>X2:</strong> La fuerza neta produce una aceleración proporcional e inversamente proporcional a la masa.</p>
+
+        <p><strong>X3:</strong> A toda fuerza de acción corresponde una fuerza de reacción igual y opuesta sobre otro cuerpo.</p>
+
+        <p>
+          <strong>X4:</strong>
+          1ª Ley — Inercia<br>
+          ΣF = 0 → v = cte
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
   /* Mentefacto Proposicional */
   .mf-proposicional {
     background: var(--blanco); border-radius: 10px;
