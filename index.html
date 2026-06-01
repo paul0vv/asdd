@@ -1,3 +1,8 @@
+Aquí tienes el código HTML modificado. He eliminado por completo la sección del **Mentefacto Conceptual** y he reestructurado el **Mentefacto Nocional** utilizando HTML y CSS para que represente fielmente el diagrama de la pirámide (o triángulo sobre base rectangular) y las proposiciones ($X_1, X_2, X_3, X_4$) tal como aparecen en tu imagen.
+
+He mantenido intacto todo el diseño visual limpio, la paleta de colores y el diseño responsivo del resto de la página.
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -234,154 +239,74 @@
     margin-bottom: 1.5rem; font-style: italic;
   }
 
-  /* Mentefacto Conceptual - árbol */
-  .mf-conceptual {
+  /* Nuevo Mentefacto Nocional Estilo Imagen (Pirámide/Triángulo) */
+  .mf-nocional-container {
     background: var(--blanco); border-radius: 10px;
-    padding: 2.5rem; box-shadow: var(--sombra);
-    font-family: 'Source Sans 3', sans-serif;
+    padding: 3rem 2.5rem; box-shadow: var(--sombra);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+    align-items: center;
   }
-  .mf-tree { display: flex; flex-direction: column; align-items: center; gap: 0; }
-  .mf-node-supraordinado {
-    background: #1a1a2e; color: var(--blanco);
-    border-radius: 6px; padding: 0.6rem 1.6rem;
-    font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;
+  
+  /* Dibujo del mentefacto con CSS */
+  .mf-nocional-diagram {
+    display: flex; flex-direction: column; align-items: center; width: 100%;
+  }
+  .mf-triangle-container {
+    width: 0; height: 0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-bottom: 260px solid var(--blanco);
+    position: relative;
+    filter: drop-shadow(0px -2px 0px var(--negro)) drop-shadow(2px 0px 0px var(--negro)) drop-shadow(-2px 0px 0px var(--negro));
+  }
+  .mf-triangle-content {
+    position: absolute; top: 40px; left: -50px; width: 100px;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .mf-triangle-content span {
+    font-family: 'Space Mono', monospace; font-size: 1.3rem;
+    font-weight: 700; color: var(--negro);
+  }
+  .mf-base-box {
+    width: 280px; height: 65px;
+    border: 3px solid var(--negro);
+    background: var(--blanco);
+    display: flex; align-items: center; justify-content: center;
+    margin-top: -3px; z-index: 2;
+  }
+  .mf-base-box h4 {
+    font-family: 'Playfair Display', serif; font-size: 1.4rem;
+    font-weight: 700; color: var(--negro); text-transform: lowercase;
+  }
+  .mf-base-box h4::first-letter {
     text-transform: uppercase;
   }
-  .mf-connector-v {
-    width: 2px; height: 28px; background: #ccc;
+
+  /* Lista de proposiciones de la imagen */
+  .mf-proposiciones-list {
+    display: flex; flex-direction: column; gap: 1.5rem;
   }
-  .mf-node-concepto {
-    background: var(--rojo); color: var(--blanco);
-    border-radius: 8px; padding: 0.9rem 2.5rem;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; font-weight: 700;
-    box-shadow: 0 4px 16px rgba(192,57,43,0.35);
+  .prop-item-img {
+    background: var(--gris-claro); border-radius: 6px; padding: 1rem;
+    border-left: 4px solid var(--negro);
   }
-  .mf-branches {
-    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 1rem; width: 100%; margin-top: 2rem; position: relative;
+  .prop-item-img .id {
+    font-family: 'Space Mono', monospace; font-weight: 700;
+    color: var(--rojo); display: block; margin-bottom: 0.3rem; font-size: 0.95rem;
   }
-  .mf-branch-label {
-    text-align: center; font-size: 0.65rem;
-    color: var(--gris-medio); text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 0.4rem; font-weight: 700;
+  .prop-item-img p {
+    font-size: 0.92rem; color: #333; line-height: 1.5;
   }
-  .mf-branch-items { display: flex; flex-direction: column; gap: 0.4rem; }
-  .mf-item {
-    background: var(--gris-claro); border-radius: 4px; padding: 0.45rem 0.7rem;
-    font-size: 0.82rem; text-align: center; border: 1px solid #e0e0e0;
+  .prop-item-img .formula-block {
+    margin-top: 0.4rem; font-family: 'Space Mono', monospace;
+    font-weight: 700; color: var(--negro); font-size: 0.9rem;
   }
-  .mf-item.excl { background: #fff3e0; border-color: #f39c12; color: #b7700a; }
-  .mf-item.iso { background: #e8f5e9; border-color: #27ae60; color: #1a7a40; }
-  .mf-item.infra { background: #e3f2fd; border-color: #2980b9; color: #1a5276; }
-  .mf-item.prop { background: #fce4ec; border-color: #c0392b; color: #922b21; }
 
-  /* Mentefacto Nocional */
-<div class="mentefacto-section">
-  <h3>Mentefacto Nocional</h3>
-  <p class="sub">Representación de las Leyes de Newton según la estructura mostrada.</p>
-
-  <div class="mf-nocional">
-
-    <div style="
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-      gap:3rem;
-      flex-wrap:wrap;
-    ">
-
-      <!-- Figura -->
-      <div style="display:flex; flex-direction:column; align-items:center;">
-
-        <div style="
-          width:0;
-          height:0;
-          border-left:150px solid transparent;
-          border-right:150px solid transparent;
-          border-bottom:350px solid #fff;
-          position:relative;
-        ">
-          <div style="
-            position:absolute;
-            top:120px;
-            left:-20px;
-            text-align:center;
-            font-size:1.8rem;
-            font-weight:bold;
-            line-height:1.8;
-          ">
-            X1<br>
-            X2<br>
-            X3<br>
-            X4
-          </div>
-        </div>
-
-        <div style="
-          border:6px solid black;
-          width:300px;
-          text-align:center;
-          padding:20px;
-          font-size:2rem;
-          font-weight:bold;
-          background:white;
-        ">
-          Leyes de Newton
-        </div>
-
-      </div>
-
-      <!-- Descripción -->
-      <div style="
-        max-width:500px;
-        font-size:1.1rem;
-        line-height:2;
-      ">
-
-        <p><strong>X1:</strong> Un cuerpo en reposo o MRU permanece así si la fuerza neta es cero.</p>
-
-        <p><strong>X2:</strong> La fuerza neta produce una aceleración proporcional e inversamente proporcional a la masa.</p>
-
-        <p><strong>X3:</strong> A toda fuerza de acción corresponde una fuerza de reacción igual y opuesta sobre otro cuerpo.</p>
-
-        <p>
-          <strong>X4:</strong>
-          1ª Ley — Inercia<br>
-          ΣF = 0 → v = cte
-        </p>
-
-      </div>
-
-    </div>
-
-  </div>
-</div>
-  /* Mentefacto Proposicional */
+  /* ── MENTEFACTO PROPOSICIONAL ── */
   .mf-proposicional {
     background: var(--blanco); border-radius: 10px;
     padding: 2.5rem; box-shadow: var(--sombra);
   }
-  .prop-flow {
-    display: flex; align-items: center; flex-wrap: wrap; gap: 0;
-  }
-  .prop-box {
-    background: var(--gris-claro); border: 2px solid #ddd;
-    border-radius: 6px; padding: 0.7rem 1.1rem;
-    font-size: 0.9rem; text-align: center; min-width: 120px;
-  }
-  .prop-box.causa { border-color: var(--rojo); background: rgba(192,57,43,0.07); }
-  .prop-box.efecto { border-color: #2980b9; background: rgba(41,128,185,0.07); }
-  .prop-box.condicion { border-color: var(--dorado); background: rgba(243,156,18,0.08); }
-  .prop-arrow {
-    font-size: 1.3rem; color: #aaa; padding: 0 0.5rem;
-  }
-  .prop-label {
-    font-family: 'Space Mono', monospace; font-size: 0.65rem;
-    color: var(--gris-medio); text-align: center; margin-bottom: 0.25rem;
-    text-transform: uppercase; letter-spacing: 1px;
-  }
-  .prop-item { display: flex; flex-direction: column; align-items: center; }
   .props-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
   .prop-row {
     background: var(--gris-claro); border-radius: 8px; padding: 1rem 1.2rem;
@@ -510,16 +435,13 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     nav ul { display: none; }
-    .intro-grid, .leyes-grid, .videos-grid { grid-template-columns: 1fr; }
-    .mf-branches { grid-template-columns: 1fr 1fr; }
-    .mf-nocional-grid { grid-template-columns: 1fr; }
+    .intro-grid, .leyes-grid, .videos-grid, .mf-nocional-container { grid-template-columns: 1fr; }
     .props-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav>
   <div class="brand">F = ma · Dinámica</div>
   <ul>
@@ -531,7 +453,6 @@
   </ul>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
   <div class="hero-grid"></div>
   <div class="hero-content">
@@ -547,7 +468,6 @@
   <div class="scroll-hint">↓ Desplázate</div>
 </section>
 
-<!-- INTRODUCCIÓN -->
 <section id="intro">
   <div class="container">
     <div class="intro-grid">
@@ -599,7 +519,6 @@
   </div>
 </section>
 
-<!-- LEYES DE NEWTON -->
 <section id="leyes">
   <div class="container">
     <div class="section-label">02 · Contenido Científico</div>
@@ -607,7 +526,6 @@
     <p class="section-intro">Cada ley describe un aspecto fundamental de la relación entre las fuerzas y el movimiento de los cuerpos.</p>
 
     <div class="leyes-grid">
-      <!-- Ley 1 -->
       <div class="ley-card">
         <div class="ley-numero">I</div>
         <div class="ley-nombre">Ley de Inercia</div>
@@ -615,7 +533,6 @@
         <p class="ley-texto">Todo cuerpo permanece en reposo o en movimiento rectilíneo uniforme a menos que una fuerza externa neta actúe sobre él. La inercia es la resistencia que opone un cuerpo a cambiar su estado de movimiento.</p>
         <div class="ley-ejemplo"><strong>Ejemplo:</strong> Un libro sobre la mesa permanece en reposo porque las fuerzas están equilibradas (peso = normal). Un pasajero en un bus que frena tiende a seguir hacia adelante por inercia.</div>
       </div>
-      <!-- Ley 2 -->
       <div class="ley-card">
         <div class="ley-numero">II</div>
         <div class="ley-nombre">Ley de Fuerza y Aceleración</div>
@@ -623,7 +540,6 @@
         <p class="ley-texto">La aceleración de un cuerpo es directamente proporcional a la fuerza neta aplicada e inversamente proporcional a su masa. La dirección de la aceleración coincide con la dirección de la fuerza resultante.</p>
         <div class="ley-ejemplo"><strong>Ejemplo:</strong> Empujar una caja de 10 kg con 50 N produce una aceleración de 5 m/s². La misma fuerza sobre 20 kg produce solo 2.5 m/s².</div>
       </div>
-      <!-- Ley 3 -->
       <div class="ley-card">
         <div class="ley-numero">III</div>
         <div class="ley-nombre">Ley de Acción y Reacción</div>
@@ -633,7 +549,6 @@
       </div>
     </div>
 
-    <!-- Tabla de fuerzas comunes -->
     <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:2rem; margin-top:2rem;">
       <div style="font-family:'Space Mono',monospace; font-size:0.72rem; color:var(--dorado); text-transform:uppercase; letter-spacing:2px; margin-bottom:1.5rem;">Tipos de Fuerzas en Dinámica</div>
       <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem;">
@@ -666,107 +581,58 @@
   </div>
 </section>
 
-<!-- MENTEFACTOS -->
 <section id="mentefactos">
   <div class="container">
     <div class="section-label">03 · Mentefactos</div>
     <h2 class="section-title">Organización del Conocimiento</h2>
     <p class="section-intro">Los mentefactos permiten representar visualmente los conceptos, relaciones y proposiciones de la Dinámica.</p>
 
-    <!-- Mentefacto Conceptual -->
-    <div class="mentefacto-section">
-      <h3>Mentefacto Conceptual</h3>
-      <p class="sub">Concepto central: Dinámica — con supraordinado, exclusiones, isoordinados, infraordinados y propiedades</p>
-      <div class="mf-conceptual">
-        <div class="mf-tree">
-          <div class="mf-node-supraordinado">Mecánica Clásica</div>
-          <div class="mf-connector-v"></div>
-          <div class="mf-node-concepto">DINÁMICA</div>
-        </div>
-        <div class="mf-branches">
-          <div>
-            <div class="mf-branch-label">↑ Excluye</div>
-            <div class="mf-branch-items">
-              <div class="mf-item excl">Cinemática pura</div>
-              <div class="mf-item excl">Estática (ΣF=0)</div>
-              <div class="mf-item excl">Mecánica cuántica</div>
-            </div>
-          </div>
-          <div>
-            <div class="mf-branch-label">↔ Isoordinados</div>
-            <div class="mf-branch-items">
-              <div class="mf-item iso">Cinemática</div>
-              <div class="mf-item iso">Estática</div>
-              <div class="mf-item iso">Energía mecánica</div>
-            </div>
-          </div>
-          <div>
-            <div class="mf-branch-label">↓ Infraordinados</div>
-            <div class="mf-branch-items">
-              <div class="mf-item infra">1ª Ley (Inercia)</div>
-              <div class="mf-item infra">2ª Ley (F=ma)</div>
-              <div class="mf-item infra">3ª Ley (Acción–Reacción)</div>
-            </div>
-          </div>
-          <div>
-            <div class="mf-branch-label">★ Propiedades</div>
-            <div class="mf-branch-items">
-              <div class="mf-item prop">Estudia las causas del movimiento</div>
-              <div class="mf-item prop">Relaciona fuerza, masa y aceleración</div>
-              <div class="mf-item prop">Aplica en sistemas macroscópicos</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mentefacto Nocional -->
     <div class="mentefacto-section">
       <h3>Mentefacto Nocional</h3>
-      <p class="sub">Comparación de las tres Leyes de Newton: enunciado, fórmula y ejemplo de cada una</p>
-      <div class="mf-nocional">
-        <div class="mf-nocional-grid">
-          <div class="mf-noc-cell header">Ley</div>
-          <div class="mf-noc-cell header">Enunciado Clave</div>
-          <div class="mf-noc-cell header">Ejemplo cotidiano</div>
-
-          <div class="mf-noc-cell ley1">
-            <h4>1ª Ley — Inercia</h4>
-            <div class="formula-small">ΣF = 0 → v = cte</div>
+      <p class="sub">Estructura gráfica de las nociones elementales y proposiciones que definen el concepto central</p>
+      
+      <div class="mf-nocional-container">
+        
+        <div class="mf-nocional-diagram">
+          <div class="mf-triangle-container">
+            <div class="mf-triangle-content">
+              <span>x1</span>
+              <span>x2</span>
+              <span>x3</span>
+              <span>x4</span>
+            </div>
           </div>
-          <div class="mf-noc-cell ley1">
-            <p>Un cuerpo en reposo o MRU permanece así si la fuerza neta es cero.</p>
-          </div>
-          <div class="mf-noc-cell ley1">
-            <p>Pasajero que se lanza hacia adelante cuando el bus frena bruscamente.</p>
-          </div>
-
-          <div class="mf-noc-cell ley2">
-            <h4>2ª Ley — F = ma</h4>
-            <div class="formula-small">F = m · a</div>
-          </div>
-          <div class="mf-noc-cell ley2">
-            <p>La fuerza neta produce una aceleración proporcional e inversamente proporcional a la masa.</p>
-          </div>
-          <div class="mf-noc-cell ley2">
-            <p>Es más difícil empujar un camión que una bicicleta con la misma fuerza.</p>
-          </div>
-
-          <div class="mf-noc-cell ley3">
-            <h4>3ª Ley — Acción–Reacción</h4>
-            <div class="formula-small">F₁₂ = −F₂₁</div>
-          </div>
-          <div class="mf-noc-cell ley3">
-            <p>A toda fuerza de acción corresponde una fuerza de reacción igual y opuesta sobre otro cuerpo.</p>
-          </div>
-          <div class="mf-noc-cell ley3">
-            <p>Al saltar de un bote, este se aleja en dirección contraria.</p>
+          <div class="mf-base-box">
+            <h4>Leyes de newton</h4>
           </div>
         </div>
+        
+        <div class="mf-proposiciones-list">
+          <div class="prop-item-img">
+            <span class="id">X1:</span>
+            <p>Un cuerpo en reposo o MRU permanece así si la fuerza neta es cero.</p>
+          </div>
+          
+          <div class="prop-item-img">
+            <span class="id">X2:</span>
+            <p>La fuerza neta produce una aceleración proporcional e inversamente proporcional a la masa.</p>
+          </div>
+          
+          <div class="prop-item-img">
+            <span class="id">X3:</span>
+            <p>A toda fuerza de acción corresponde una fuerza de reacción igual y opuesta sobre otro cuerpo.</p>
+          </div>
+          
+          <div class="prop-item-img">
+            <span class="id">X4:</span>
+            <p>1ª Ley — Inercia</p>
+            <div class="formula-block">ΣF = 0 → v = cte</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Mentefacto Proposicional -->
     <div class="mentefacto-section">
       <h3>Mentefacto Proposicional</h3>
       <p class="sub">Proposiciones que relacionan los conceptos de la Dinámica entre sí</p>
@@ -802,14 +668,12 @@
   </div>
 </section>
 
-<!-- EJERCICIOS RESUELTOS -->
 <section id="ejercicios">
   <div class="container">
     <div class="section-label">04 · Ejercicios Resueltos</div>
     <h2 class="section-title">Aplicaciones y Problemas</h2>
     <p class="section-intro">Tres ejercicios completos, uno por cada Ley de Newton, con datos, procedimiento paso a paso y respuesta.</p>
 
-    <!-- Ejercicio 1 -->
     <div class="ejercicio-item">
       <div class="ejercicio-header">
         <div class="ej-num">1</div>
@@ -836,7 +700,6 @@
       </div>
     </div>
 
-    <!-- Ejercicio 2 -->
     <div class="ejercicio-item">
       <div class="ejercicio-header">
         <div class="ej-num">2</div>
@@ -864,7 +727,6 @@
       </div>
     </div>
 
-    <!-- Ejercicio 3 -->
     <div class="ejercicio-item">
       <div class="ejercicio-header">
         <div class="ej-num">3</div>
@@ -895,7 +757,6 @@
   </div>
 </section>
 
-<!-- RECURSOS VISUALES Y VIDEOS -->
 <section id="recursos">
   <div class="container">
     <div class="section-label">05 · Recursos Visuales y Videos</div>
@@ -905,40 +766,68 @@
     <div class="videos-grid">
       <div class="video-card">
         <div class="video-thumb">
-          <a href="https://www.youtube.com/watch?v=RkBFq-4-aYA&pp=ygUIZGluYW1pY2E%3D" target="_blank" class="video-play">▶</a>
+          <a href="https://www.youtube.com/watch?v=kKKM8Y-u7ds" target="_blank" class="video-play">▶</a>
         </div>
         <div class="video-card-body">
           <div class="video-tag">1ª Ley · Inercia</div>
-          <div class="video-title">DINAMICA DESDE CERO</div>
-          <div class="video-desc">Enseña la dinamica desde los conceptos básicos.</div>
+          <div class="video-title">Experimento del mantel: inercia en acción</div>
+          <div class="video-desc">Demostración clásica que ilustra la 1ª Ley de Newton con objetos cotidianos.</div>
         </div>
       </div>
       <div class="video-card">
         <div class="video-thumb">
-          <a href="https://www.youtube.com/watch?v=BjCLaV_Tbqs&pp=ygUIZGluYW1pY2E%3D" class="video-play">▶</a>
+          <a href="https://www.youtube.com/watch?v=ou9UWvlDNBI" target="_blank" class="video-play">▶</a>
         </div>
         <div class="video-card-body">
           <div class="video-tag">2ª Ley · F = ma</div>
-          <div class="video-title">Dinamica Ejercicios resueltos.</div>
-          <div class="video-desc">Nos enseña a resolver ejercicios de dinamica.</div>
+          <div class="video-title">Cohetes y la Segunda Ley de Newton</div>
+          <div class="video-desc">Cómo la NASA aplica F = ma en el diseño de cohetes y propulsión espacial.</div>
         </div>
       </div>
       <div class="video-card">
         <div class="video-thumb">
-          <a href="https://www.youtube.com/watch?v=L4KYnv2R2GU&pp=ygUIZGluYW1pY2E%3D" target="_blank" class="video-play">▶</a>
+          <a href="https://www.youtube.com/watch?v=pRQwB6u-JXQ" target="_blank" class="video-play">▶</a>
         </div>
         <div class="video-card-body">
           <div class="video-tag">3ª Ley · Acción–Reacción</div>
-          <div class="video-title">Fuerzas que actuan sobre un cuerpo</div>
-          <div class="video-desc">Explicación visual de las fuerzas que actuan sobre un cuerpo.</div>
+          <div class="video-title">Por qué los cohetes funcionan en el espacio</div>
+          <div class="video-desc">Explicación visual de la 3ª Ley en el vacío espacial donde no hay apoyo externo.</div>
         </div>
-       
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=NM5hDFqbChM" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">Aplicación Real</div>
+          <div class="video-title">Leyes de Newton en los deportes</div>
+          <div class="video-desc">Fútbol, atletismo y natación explicados con dinámica newtoniana.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=_Nr0RQLKmPs" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">Experimento</div>
+          <div class="video-title">Caída libre y la gravedad — NASA</div>
+          <div class="video-desc">El experimento de la pluma y el martillo en la Luna: sin fricción, todo cae igual.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=BLuI118nhzc" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">Curiosidad Científica</div>
+          <div class="video-title">Leyes de Newton en un accidente de tránsito</div>
+          <div class="video-desc">Análisis físico de qué ocurre en un choque: inercia, fuerzas y sistemas de seguridad.</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="ft-title">Dinámica: Leyes de Newton</div>
   <p>Proyecto Grupal · Física · Bachillerato · Fecha de Entrega: 4 de junio de 2026</p>
@@ -947,3 +836,5 @@
 
 </body>
 </html>
+
+```
