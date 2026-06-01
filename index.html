@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dinámica: Leyes de Newton</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0a0a0f;
+    --rojo: #c0392b;
+    --rojo-claro: #e74c3c;
+    --dorado: #f39c12;
+    --crema: #fdf6ec;
+    --gris-claro: #f4f4f0;
+    --gris-medio: #888;
+    --blanco: #ffffff;
+    --sombra: 0 4px 24px rgba(0,0,0,0.12);
+    --sombra-fuerte: 0 8px 48px rgba(0,0,0,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--crema);
+    color: var(--negro);
+    overflow-x: hidden;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,10,15,0.96);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 60px;
+    border-bottom: 2px solid var(--rojo);
+  }
+  nav .brand {
+    font-family: 'Space Mono', monospace;
+    color: var(--dorado); font-size: 0.85rem; letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  nav ul {
+    display: flex; gap: 2rem; list-style: none;
+  }
+  nav ul a {
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    font-size: 0.82rem; letter-spacing: 1px; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--dorado); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    background: var(--negro);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding-top: 60px;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(192,57,43,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(192,57,43,0.1) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPulse 4s ease-in-out infinite;
+  }
+  @keyframes gridPulse {
+    0%,100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+  .hero-content {
+    position: relative; z-index: 2; text-align: center;
+    padding: 2rem;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    color: var(--rojo); font-size: 0.75rem; letter-spacing: 4px;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900; color: var(--blanco);
+    line-height: 0.95; margin-bottom: 1rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-title span { color: var(--rojo); }
+  .hero-subtitle {
+    font-size: 1.15rem; color: rgba(255,255,255,0.55);
+    font-weight: 300; max-width: 520px; margin: 0 auto 2.5rem;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .hero-formulas {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+  .formula-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(192,57,43,0.4);
+    color: var(--dorado);
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem; padding: 0.6rem 1.4rem;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.3); font-size: 0.75rem; letter-spacing: 2px;
+    text-transform: uppercase; animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS GENERAL ── */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    color: var(--rojo); font-size: 0.72rem; letter-spacing: 4px;
+    text-transform: uppercase; margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+    margin-bottom: 1rem; line-height: 1.1;
+  }
+  .section-intro {
+    font-size: 1.05rem; color: #444; max-width: 680px;
+    line-height: 1.7; margin-bottom: 3rem;
+  }
+
+  /* ── INTRO ── */
+  #intro { background: var(--crema); }
+  .intro-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+  }
+  .intro-visual {
+    background: var(--negro);
+    border-radius: 8px; padding: 3rem;
+    display: flex; flex-direction: column; gap: 1.5rem;
+    box-shadow: var(--sombra-fuerte);
+  }
+  .newton-quote {
+    font-family: 'Playfair Display', serif;
+    color: var(--crema); font-size: 1.1rem; line-height: 1.6;
+    font-style: italic; border-left: 3px solid var(--rojo);
+    padding-left: 1.2rem;
+  }
+  .newton-attr {
+    font-family: 'Space Mono', monospace;
+    color: var(--dorado); font-size: 0.75rem; letter-spacing: 2px;
+  }
+  .key-concepts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;
+  }
+  .concept-card {
+    background: var(--blanco); border-radius: 6px; padding: 1.2rem;
+    border-left: 3px solid var(--rojo); box-shadow: var(--sombra);
+  }
+  .concept-card h4 {
+    font-family: 'Space Mono', monospace; font-size: 0.75rem;
+    color: var(--rojo); text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+  }
+  .concept-card p { font-size: 0.9rem; color: #555; line-height: 1.5; }
+
+  /* ── LEYES ── */
+  #leyes { background: var(--negro); }
+  #leyes .section-title { color: var(--blanco); }
+  #leyes .section-label { color: var(--dorado); }
+  #leyes .section-intro { color: rgba(255,255,255,0.55); }
+
+  .leyes-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+    margin-bottom: 4rem;
+  }
+  .ley-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-top: 3px solid var(--rojo);
+    border-radius: 8px; padding: 2rem;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .ley-card:hover { transform: translateY(-6px); border-top-color: var(--dorado); }
+  .ley-numero {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; font-weight: 900;
+    color: rgba(192,57,43,0.25); line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .ley-nombre {
+    font-family: 'Playfair Display', serif;
+    color: var(--blanco); font-size: 1.3rem; font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .ley-formula {
+    background: rgba(243,156,18,0.1); border: 1px solid rgba(243,156,18,0.3);
+    border-radius: 4px; padding: 0.7rem 1rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--dorado); font-size: 1rem;
+    margin-bottom: 1rem; text-align: center;
+  }
+  .ley-texto { color: rgba(255,255,255,0.65); font-size: 0.95rem; line-height: 1.65; }
+  .ley-ejemplo {
+    margin-top: 1rem; padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.4); font-size: 0.85rem;
+  }
+  .ley-ejemplo strong { color: var(--rojo-claro); }
+
+  /* ── MENTEFACTOS ── */
+  #mentefactos { background: var(--gris-claro); }
+
+  .mentefacto-section { margin-bottom: 4rem; }
+  .mentefacto-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; margin-bottom: 0.3rem; color: var(--negro);
+  }
+  .mentefacto-section .sub {
+    font-size: 0.85rem; color: var(--gris-medio);
+    margin-bottom: 1.5rem; font-style: italic;
+  }
+
+  /* Mentefacto Conceptual - árbol */
+  .mf-conceptual {
+    background: var(--blanco); border-radius: 10px;
+    padding: 2.5rem; box-shadow: var(--sombra);
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .mf-tree { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .mf-node-supraordinado {
+    background: #1a1a2e; color: var(--blanco);
+    border-radius: 6px; padding: 0.6rem 1.6rem;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .mf-connector-v {
+    width: 2px; height: 28px; background: #ccc;
+  }
+  .mf-node-concepto {
+    background: var(--rojo); color: var(--blanco);
+    border-radius: 8px; padding: 0.9rem 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    box-shadow: 0 4px 16px rgba(192,57,43,0.35);
+  }
+  .mf-branches {
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem; width: 100%; margin-top: 2rem; position: relative;
+  }
+  .mf-branch-label {
+    text-align: center; font-size: 0.65rem;
+    color: var(--gris-medio); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 0.4rem; font-weight: 700;
+  }
+  .mf-branch-items { display: flex; flex-direction: column; gap: 0.4rem; }
+  .mf-item {
+    background: var(--gris-claro); border-radius: 4px; padding: 0.45rem 0.7rem;
+    font-size: 0.82rem; text-align: center; border: 1px solid #e0e0e0;
+  }
+  .mf-item.excl { background: #fff3e0; border-color: #f39c12; color: #b7700a; }
+  .mf-item.iso { background: #e8f5e9; border-color: #27ae60; color: #1a7a40; }
+  .mf-item.infra { background: #e3f2fd; border-color: #2980b9; color: #1a5276; }
+  .mf-item.prop { background: #fce4ec; border-color: #c0392b; color: #922b21; }
+
+  /* Mentefacto Nocional */
+  .mf-nocional {
+    background: var(--blanco); border-radius: 10px;
+    padding: 2.5rem; box-shadow: var(--sombra);
+  }
+  .mf-nocional-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+    border: 2px solid var(--negro); border-radius: 6px; overflow: hidden;
+  }
+  .mf-noc-cell {
+    padding: 1rem; border-right: 2px solid var(--negro);
+    border-bottom: 2px solid var(--negro);
+  }
+  .mf-noc-cell:nth-child(3n) { border-right: none; }
+  .mf-noc-cell:nth-last-child(-n+3) { border-bottom: none; }
+  .mf-noc-cell.header {
+    background: var(--negro); color: var(--blanco);
+    font-family: 'Space Mono', monospace; font-size: 0.7rem;
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+  }
+  .mf-noc-cell.ley1 { background: rgba(192,57,43,0.08); }
+  .mf-noc-cell.ley2 { background: rgba(243,156,18,0.08); }
+  .mf-noc-cell.ley3 { background: rgba(39,174,96,0.1); }
+  .mf-noc-cell h4 {
+    font-family: 'Playfair Display', serif; font-size: 0.95rem;
+    margin-bottom: 0.4rem; font-weight: 700;
+  }
+  .mf-noc-cell p { font-size: 0.82rem; color: #555; line-height: 1.5; }
+  .mf-noc-cell .formula-small {
+    font-family: 'Space Mono', monospace; font-size: 0.82rem;
+    color: var(--rojo); margin-top: 0.4rem; font-weight: 700;
+  }
+
+  /* Mentefacto Proposicional */
+  .mf-proposicional {
+    background: var(--blanco); border-radius: 10px;
+    padding: 2.5rem; box-shadow: var(--sombra);
+  }
+  .prop-flow {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0;
+  }
+  .prop-box {
+    background: var(--gris-claro); border: 2px solid #ddd;
+    border-radius: 6px; padding: 0.7rem 1.1rem;
+    font-size: 0.9rem; text-align: center; min-width: 120px;
+  }
+  .prop-box.causa { border-color: var(--rojo); background: rgba(192,57,43,0.07); }
+  .prop-box.efecto { border-color: #2980b9; background: rgba(41,128,185,0.07); }
+  .prop-box.condicion { border-color: var(--dorado); background: rgba(243,156,18,0.08); }
+  .prop-arrow {
+    font-size: 1.3rem; color: #aaa; padding: 0 0.5rem;
+  }
+  .prop-label {
+    font-family: 'Space Mono', monospace; font-size: 0.65rem;
+    color: var(--gris-medio); text-align: center; margin-bottom: 0.25rem;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .prop-item { display: flex; flex-direction: column; align-items: center; }
+  .props-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+  .prop-row {
+    background: var(--gris-claro); border-radius: 8px; padding: 1rem 1.2rem;
+    display: flex; align-items: center; gap: 1rem;
+    border-left: 3px solid var(--rojo);
+  }
+  .prop-row .conector {
+    font-family: 'Space Mono', monospace; font-size: 0.72rem;
+    color: var(--rojo); text-transform: uppercase; min-width: 60px;
+  }
+  .prop-row .enunciado { font-size: 0.9rem; color: #333; line-height: 1.4; }
+
+  /* ── EJERCICIOS ── */
+  #ejercicios { background: var(--crema); }
+  .ejercicio-item {
+    background: var(--blanco); border-radius: 8px;
+    margin-bottom: 2rem; box-shadow: var(--sombra);
+    overflow: hidden;
+  }
+  .ejercicio-header {
+    background: var(--negro); padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .ej-num {
+    background: var(--rojo); color: var(--blanco);
+    font-family: 'Space Mono', monospace; font-size: 0.75rem;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .ej-titulo {
+    color: var(--blanco); font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+  }
+  .ej-ley {
+    margin-left: auto; font-family: 'Space Mono', monospace;
+    font-size: 0.68rem; color: var(--dorado); letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .ejercicio-body { padding: 1.5rem; }
+  .ej-enunciado {
+    font-size: 0.98rem; color: #333; line-height: 1.7;
+    margin-bottom: 1.2rem; padding-bottom: 1.2rem;
+    border-bottom: 1px dashed #ddd;
+  }
+  .ej-datos {
+    display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.2rem;
+  }
+  .dato-item {
+    background: var(--gris-claro); border-radius: 4px; padding: 0.4rem 0.8rem;
+    font-family: 'Space Mono', monospace; font-size: 0.82rem; color: #444;
+  }
+  .ej-solucion h4 {
+    font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--rojo);
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.8rem;
+  }
+  .paso {
+    display: flex; gap: 1rem; align-items: baseline; margin-bottom: 0.7rem;
+  }
+  .paso-n {
+    font-family: 'Space Mono', monospace; font-size: 0.72rem;
+    color: var(--gris-medio); min-width: 20px;
+  }
+  .paso-texto { font-size: 0.92rem; color: #444; line-height: 1.6; }
+  .paso-formula {
+    font-family: 'Space Mono', monospace; font-size: 0.92rem;
+    color: var(--negro); background: var(--gris-claro);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+  }
+  .respuesta-final {
+    margin-top: 1rem; background: rgba(192,57,43,0.08);
+    border: 1.5px solid var(--rojo); border-radius: 6px;
+    padding: 0.8rem 1.2rem;
+    font-family: 'Space Mono', monospace; font-size: 0.92rem; color: var(--rojo);
+  }
+
+  /* ── VIDEOS ── */
+  #recursos { background: var(--negro); }
+  #recursos .section-title { color: var(--blanco); }
+  #recursos .section-label { color: var(--dorado); }
+  #recursos .section-intro { color: rgba(255,255,255,0.5); }
+
+  .videos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .video-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .video-card:hover { transform: translateY(-4px); border-color: var(--rojo); }
+  .video-thumb {
+    background: rgba(192,57,43,0.2);
+    height: 140px; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .video-play {
+    width: 52px; height: 52px; background: var(--rojo);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; color: var(--blanco); cursor: pointer;
+    transition: transform 0.2s; text-decoration: none;
+  }
+  .video-play:hover { transform: scale(1.1); }
+  .video-card-body { padding: 1rem 1.2rem; }
+  .video-tag {
+    font-family: 'Space Mono', monospace; font-size: 0.65rem;
+    color: var(--dorado); text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+  }
+  .video-title { color: var(--blanco); font-size: 0.92rem; font-weight: 600; line-height: 1.4; }
+  .video-desc { color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.4; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #050507; padding: 2.5rem;
+    text-align: center; border-top: 2px solid var(--rojo);
+  }
+  footer p {
+    color: rgba(255,255,255,0.3); font-size: 0.82rem;
+    font-family: 'Space Mono', monospace; letter-spacing: 1px;
+  }
+  footer .ft-title {
+    font-family: 'Playfair Display', serif; color: var(--blanco);
+    font-size: 1.3rem; margin-bottom: 0.5rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    .intro-grid, .leyes-grid, .videos-grid { grid-template-columns: 1fr; }
+    .mf-branches { grid-template-columns: 1fr 1fr; }
+    .mf-nocional-grid { grid-template-columns: 1fr; }
+    .props-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="brand">F = ma · Dinámica</div>
+  <ul>
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#leyes">Leyes</a></li>
+    <li><a href="#mentefactos">Mentefactos</a></li>
+    <li><a href="#ejercicios">Ejercicios</a></li>
+    <li><a href="#recursos">Recursos</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Física · Bachillerato · Proyecto Grupal</div>
+    <h1 class="hero-title">Dinámica y<br><span>Leyes de</span><br>Newton</h1>
+    <p class="hero-subtitle">El estudio de las fuerzas y el movimiento que rigen el universo físico, desde una manzana que cae hasta los cohetes espaciales.</p>
+    <div class="hero-formulas">
+      <div class="formula-chip">F = m · a</div>
+      <div class="formula-chip">p = m · v</div>
+      <div class="formula-chip">F₁₂ = −F₂₁</div>
+    </div>
+  </div>
+  <div class="scroll-hint">↓ Desplázate</div>
+</section>
+
+<!-- INTRODUCCIÓN -->
+<section id="intro">
+  <div class="container">
+    <div class="intro-grid">
+      <div>
+        <div class="section-label">01 · Introducción</div>
+        <h2 class="section-title">¿Qué es la Dinámica?</h2>
+        <p class="section-intro">La <strong>dinámica</strong> es la rama de la física que estudia las causas del movimiento: las <em>fuerzas</em>. A diferencia de la cinemática, que solo describe cómo se mueven los objetos, la dinámica explica <em>por qué</em> se mueven.</p>
+        <p style="font-size:1rem; color:#444; line-height:1.7; margin-bottom:2rem;">Isaac Newton (1643–1727) formuló las tres leyes fundamentales que describen la relación entre las fuerzas que actúan sobre un cuerpo y su movimiento resultante. Estas leyes son la base de la <strong>mecánica clásica</strong> y se aplican en fenómenos cotidianos y en ingeniería.</p>
+        <div class="key-concepts">
+          <div class="concept-card">
+            <h4>Fuerza</h4>
+            <p>Interacción que puede cambiar el estado de movimiento de un cuerpo. Se mide en Newtons (N).</p>
+          </div>
+          <div class="concept-card">
+            <h4>Masa</h4>
+            <p>Medida de la inercia de un cuerpo; resistencia que opone al cambio de movimiento. Se mide en kg.</p>
+          </div>
+          <div class="concept-card">
+            <h4>Aceleración</h4>
+            <p>Variación de la velocidad en el tiempo. Indica cómo cambia el movimiento. Se mide en m/s².</p>
+          </div>
+          <div class="concept-card">
+            <h4>Inercia</h4>
+            <p>Tendencia de los cuerpos a mantener su estado de reposo o movimiento uniforme.</p>
+          </div>
+        </div>
+      </div>
+      <div class="intro-visual">
+        <div class="newton-quote">
+          "Si he visto más lejos, es porque estoy sentado sobre los hombros de gigantes."
+        </div>
+        <div class="newton-attr">— Isaac Newton, 1675</div>
+        <div style="margin-top:1.5rem; border-top:1px solid rgba(255,255,255,0.1); padding-top:1.5rem;">
+          <div style="color:rgba(255,255,255,0.4); font-size:0.78rem; font-family:'Space Mono',monospace; letter-spacing:1px; margin-bottom:1rem;">IMPORTANCIA EN LA CIENCIA</div>
+          <p style="color:rgba(255,255,255,0.65); font-size:0.92rem; line-height:1.7;">Las leyes de Newton permitieron predecir el movimiento de los planetas, diseñar máquinas industriales, calcular trayectorias de cohetes y entender desde el frenado de un auto hasta el funcionamiento de un ascensor.</p>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+          <div style="text-align:center;">
+            <div style="font-family:'Playfair Display',serif; color:var(--dorado); font-size:2.5rem; font-weight:900;">3</div>
+            <div style="color:rgba(255,255,255,0.4); font-size:0.75rem; letter-spacing:1px;">LEYES FUNDAMENTALES</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-family:'Playfair Display',serif; color:var(--dorado); font-size:2.5rem; font-weight:900;">1687</div>
+            <div style="color:rgba(255,255,255,0.4); font-size:0.75rem; letter-spacing:1px;">AÑO DE PUBLICACIÓN</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEYES DE NEWTON -->
+<section id="leyes">
+  <div class="container">
+    <div class="section-label">02 · Contenido Científico</div>
+    <h2 class="section-title" style="color:var(--blanco);">Las Tres Leyes de Newton</h2>
+    <p class="section-intro">Cada ley describe un aspecto fundamental de la relación entre las fuerzas y el movimiento de los cuerpos.</p>
+
+    <div class="leyes-grid">
+      <!-- Ley 1 -->
+      <div class="ley-card">
+        <div class="ley-numero">I</div>
+        <div class="ley-nombre">Ley de Inercia</div>
+        <div class="ley-formula">ΣF = 0 → v = cte</div>
+        <p class="ley-texto">Todo cuerpo permanece en reposo o en movimiento rectilíneo uniforme a menos que una fuerza externa neta actúe sobre él. La inercia es la resistencia que opone un cuerpo a cambiar su estado de movimiento.</p>
+        <div class="ley-ejemplo"><strong>Ejemplo:</strong> Un libro sobre la mesa permanece en reposo porque las fuerzas están equilibradas (peso = normal). Un pasajero en un bus que frena tiende a seguir hacia adelante por inercia.</div>
+      </div>
+      <!-- Ley 2 -->
+      <div class="ley-card">
+        <div class="ley-numero">II</div>
+        <div class="ley-nombre">Ley de Fuerza y Aceleración</div>
+        <div class="ley-formula">F = m · a</div>
+        <p class="ley-texto">La aceleración de un cuerpo es directamente proporcional a la fuerza neta aplicada e inversamente proporcional a su masa. La dirección de la aceleración coincide con la dirección de la fuerza resultante.</p>
+        <div class="ley-ejemplo"><strong>Ejemplo:</strong> Empujar una caja de 10 kg con 50 N produce una aceleración de 5 m/s². La misma fuerza sobre 20 kg produce solo 2.5 m/s².</div>
+      </div>
+      <!-- Ley 3 -->
+      <div class="ley-card">
+        <div class="ley-numero">III</div>
+        <div class="ley-nombre">Ley de Acción y Reacción</div>
+        <div class="ley-formula">F₁₂ = −F₂₁</div>
+        <p class="ley-texto">Cuando un cuerpo ejerce una fuerza sobre otro (acción), el segundo ejerce sobre el primero una fuerza igual en magnitud pero opuesta en dirección (reacción). Estas fuerzas actúan sobre cuerpos distintos.</p>
+        <div class="ley-ejemplo"><strong>Ejemplo:</strong> Al caminar, el pie empuja el suelo hacia atrás (acción) y el suelo empuja el pie hacia adelante (reacción). Un cohete expulsa gases hacia abajo y se propulsa hacia arriba.</div>
+      </div>
+    </div>
+
+    <!-- Tabla de fuerzas comunes -->
+    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:2rem; margin-top:2rem;">
+      <div style="font-family:'Space Mono',monospace; font-size:0.72rem; color:var(--dorado); text-transform:uppercase; letter-spacing:2px; margin-bottom:1.5rem;">Tipos de Fuerzas en Dinámica</div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem;">
+        <div style="text-align:center; padding:1rem; background:rgba(255,255,255,0.04); border-radius:6px;">
+          <div style="font-size:1.8rem; margin-bottom:0.5rem;">⬇️</div>
+          <div style="color:var(--blanco); font-size:0.85rem; font-weight:600; margin-bottom:0.3rem;">Peso</div>
+          <div style="font-family:'Space Mono',monospace; color:var(--dorado); font-size:0.78rem; margin-bottom:0.4rem;">P = m · g</div>
+          <div style="color:rgba(255,255,255,0.4); font-size:0.78rem;">g = 9.8 m/s²</div>
+        </div>
+        <div style="text-align:center; padding:1rem; background:rgba(255,255,255,0.04); border-radius:6px;">
+          <div style="font-size:1.8rem; margin-bottom:0.5rem;">⬆️</div>
+          <div style="color:var(--blanco); font-size:0.85rem; font-weight:600; margin-bottom:0.3rem;">Normal</div>
+          <div style="font-family:'Space Mono',monospace; color:var(--dorado); font-size:0.78rem; margin-bottom:0.4rem;">N ⊥ superficie</div>
+          <div style="color:rgba(255,255,255,0.4); font-size:0.78rem;">Perpendicular al plano</div>
+        </div>
+        <div style="text-align:center; padding:1rem; background:rgba(255,255,255,0.04); border-radius:6px;">
+          <div style="font-size:1.8rem; margin-bottom:0.5rem;">↔️</div>
+          <div style="color:var(--blanco); font-size:0.85rem; font-weight:600; margin-bottom:0.3rem;">Fricción</div>
+          <div style="font-family:'Space Mono',monospace; color:var(--dorado); font-size:0.78rem; margin-bottom:0.4rem;">f = μ · N</div>
+          <div style="color:rgba(255,255,255,0.4); font-size:0.78rem;">Opone al movimiento</div>
+        </div>
+        <div style="text-align:center; padding:1rem; background:rgba(255,255,255,0.04); border-radius:6px;">
+          <div style="font-size:1.8rem; margin-bottom:0.5rem;">↗️</div>
+          <div style="color:var(--blanco); font-size:0.85rem; font-weight:600; margin-bottom:0.3rem;">Tensión</div>
+          <div style="font-family:'Space Mono',monospace; color:var(--dorado); font-size:0.78rem; margin-bottom:0.4rem;">T = m · a + P</div>
+          <div style="color:rgba(255,255,255,0.4); font-size:0.78rem;">Transmitida por cuerdas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENTEFACTOS -->
+<section id="mentefactos">
+  <div class="container">
+    <div class="section-label">03 · Mentefactos</div>
+    <h2 class="section-title">Organización del Conocimiento</h2>
+    <p class="section-intro">Los mentefactos permiten representar visualmente los conceptos, relaciones y proposiciones de la Dinámica.</p>
+
+    <!-- Mentefacto Conceptual -->
+    <div class="mentefacto-section">
+      <h3>Mentefacto Conceptual</h3>
+      <p class="sub">Concepto central: Dinámica — con supraordinado, exclusiones, isoordinados, infraordinados y propiedades</p>
+      <div class="mf-conceptual">
+        <div class="mf-tree">
+          <div class="mf-node-supraordinado">Mecánica Clásica</div>
+          <div class="mf-connector-v"></div>
+          <div class="mf-node-concepto">DINÁMICA</div>
+        </div>
+        <div class="mf-branches">
+          <div>
+            <div class="mf-branch-label">↑ Excluye</div>
+            <div class="mf-branch-items">
+              <div class="mf-item excl">Cinemática pura</div>
+              <div class="mf-item excl">Estática (ΣF=0)</div>
+              <div class="mf-item excl">Mecánica cuántica</div>
+            </div>
+          </div>
+          <div>
+            <div class="mf-branch-label">↔ Isoordinados</div>
+            <div class="mf-branch-items">
+              <div class="mf-item iso">Cinemática</div>
+              <div class="mf-item iso">Estática</div>
+              <div class="mf-item iso">Energía mecánica</div>
+            </div>
+          </div>
+          <div>
+            <div class="mf-branch-label">↓ Infraordinados</div>
+            <div class="mf-branch-items">
+              <div class="mf-item infra">1ª Ley (Inercia)</div>
+              <div class="mf-item infra">2ª Ley (F=ma)</div>
+              <div class="mf-item infra">3ª Ley (Acción–Reacción)</div>
+            </div>
+          </div>
+          <div>
+            <div class="mf-branch-label">★ Propiedades</div>
+            <div class="mf-branch-items">
+              <div class="mf-item prop">Estudia las causas del movimiento</div>
+              <div class="mf-item prop">Relaciona fuerza, masa y aceleración</div>
+              <div class="mf-item prop">Aplica en sistemas macroscópicos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mentefacto Nocional -->
+    <div class="mentefacto-section">
+      <h3>Mentefacto Nocional</h3>
+      <p class="sub">Comparación de las tres Leyes de Newton: enunciado, fórmula y ejemplo de cada una</p>
+      <div class="mf-nocional">
+        <div class="mf-nocional-grid">
+          <div class="mf-noc-cell header">Ley</div>
+          <div class="mf-noc-cell header">Enunciado Clave</div>
+          <div class="mf-noc-cell header">Ejemplo cotidiano</div>
+
+          <div class="mf-noc-cell ley1">
+            <h4>1ª Ley — Inercia</h4>
+            <div class="formula-small">ΣF = 0 → v = cte</div>
+          </div>
+          <div class="mf-noc-cell ley1">
+            <p>Un cuerpo en reposo o MRU permanece así si la fuerza neta es cero.</p>
+          </div>
+          <div class="mf-noc-cell ley1">
+            <p>Pasajero que se lanza hacia adelante cuando el bus frena bruscamente.</p>
+          </div>
+
+          <div class="mf-noc-cell ley2">
+            <h4>2ª Ley — F = ma</h4>
+            <div class="formula-small">F = m · a</div>
+          </div>
+          <div class="mf-noc-cell ley2">
+            <p>La fuerza neta produce una aceleración proporcional e inversamente proporcional a la masa.</p>
+          </div>
+          <div class="mf-noc-cell ley2">
+            <p>Es más difícil empujar un camión que una bicicleta con la misma fuerza.</p>
+          </div>
+
+          <div class="mf-noc-cell ley3">
+            <h4>3ª Ley — Acción–Reacción</h4>
+            <div class="formula-small">F₁₂ = −F₂₁</div>
+          </div>
+          <div class="mf-noc-cell ley3">
+            <p>A toda fuerza de acción corresponde una fuerza de reacción igual y opuesta sobre otro cuerpo.</p>
+          </div>
+          <div class="mf-noc-cell ley3">
+            <p>Al saltar de un bote, este se aleja en dirección contraria.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mentefacto Proposicional -->
+    <div class="mentefacto-section">
+      <h3>Mentefacto Proposicional</h3>
+      <p class="sub">Proposiciones que relacionan los conceptos de la Dinámica entre sí</p>
+      <div class="mf-proposicional">
+        <div class="props-grid">
+          <div class="prop-row">
+            <div class="conector">Si</div>
+            <div class="enunciado">la fuerza neta sobre un cuerpo es cero, <strong>entonces</strong> su aceleración es cero y mantiene su estado de movimiento.</div>
+          </div>
+          <div class="prop-row">
+            <div class="conector">Cuando</div>
+            <div class="enunciado">aumenta la masa de un cuerpo, <strong>entonces</strong> se necesita mayor fuerza para producir la misma aceleración.</div>
+          </div>
+          <div class="prop-row">
+            <div class="conector">Siempre</div>
+            <div class="enunciado">que un cuerpo A ejerce fuerza sobre B, el cuerpo B ejerce fuerza igual y opuesta sobre A.</div>
+          </div>
+          <div class="prop-row">
+            <div class="conector">Dado que</div>
+            <div class="enunciado">la fuerza es proporcional a la aceleración, <strong>si</strong> se duplica la fuerza se duplica la aceleración (masa constante).</div>
+          </div>
+          <div class="prop-row">
+            <div class="conector">Porque</div>
+            <div class="enunciado">la inercia depende de la masa, los cuerpos más masivos son más difíciles de acelerar o detener.</div>
+          </div>
+          <div class="prop-row">
+            <div class="conector">Aunque</div>
+            <div class="enunciado">las fuerzas de acción y reacción son iguales, actúan sobre <strong>cuerpos distintos</strong>, por lo que no se cancelan entre sí.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EJERCICIOS RESUELTOS -->
+<section id="ejercicios">
+  <div class="container">
+    <div class="section-label">04 · Ejercicios Resueltos</div>
+    <h2 class="section-title">Aplicaciones y Problemas</h2>
+    <p class="section-intro">Tres ejercicios completos, uno por cada Ley de Newton, con datos, procedimiento paso a paso y respuesta.</p>
+
+    <!-- Ejercicio 1 -->
+    <div class="ejercicio-item">
+      <div class="ejercicio-header">
+        <div class="ej-num">1</div>
+        <div class="ej-titulo">Bus que frena — Fuerza de inercia</div>
+        <div class="ej-ley">1ª Ley · Inercia</div>
+      </div>
+      <div class="ejercicio-body">
+        <div class="ej-enunciado">
+          Un pasajero de 70 kg viaja en un bus a 72 km/h. El bus frena uniformemente y se detiene en 5 segundos. ¿Cuál es la fuerza neta que actúa sobre el pasajero durante el frenado? ¿Qué ley de Newton explica por qué el pasajero tiende a seguir hacia adelante?
+        </div>
+        <div class="ej-datos">
+          <div class="dato-item">m = 70 kg</div>
+          <div class="dato-item">v₀ = 72 km/h = 20 m/s</div>
+          <div class="dato-item">vf = 0 m/s</div>
+          <div class="dato-item">t = 5 s</div>
+        </div>
+        <div class="ej-solucion">
+          <h4>▸ Solución</h4>
+          <div class="paso"><span class="paso-n">1.</span><span class="paso-texto">Calcular la aceleración (desaceleración): <span class="paso-formula">a = (vf − v₀) / t = (0 − 20) / 5 = −4 m/s²</span></span></div>
+          <div class="paso"><span class="paso-n">2.</span><span class="paso-texto">Aplicar la 2ª Ley para hallar la fuerza: <span class="paso-formula">F = m · a = 70 × (−4) = −280 N</span></span></div>
+          <div class="paso"><span class="paso-n">3.</span><span class="paso-texto">El signo negativo indica que la fuerza (del cinturón o asiento) actúa hacia atrás sobre el pasajero. Por la <strong>1ª Ley</strong>, el pasajero tiende a mantenerse en movimiento hacia adelante (inercia), hasta que la fuerza del respaldo lo desacelera.</span></div>
+          <div class="respuesta-final">R: La fuerza neta es 280 N hacia atrás. La 1ª Ley de Newton (inercia) explica la tendencia del pasajero a seguir hacia adelante.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 2 -->
+    <div class="ejercicio-item">
+      <div class="ejercicio-header">
+        <div class="ej-num">2</div>
+        <div class="ej-titulo">Caja sobre plano horizontal con fricción</div>
+        <div class="ej-ley">2ª Ley · F = ma</div>
+      </div>
+      <div class="ejercicio-body">
+        <div class="ej-enunciado">
+          Se aplica una fuerza horizontal de 120 N sobre una caja de 25 kg que reposa sobre el suelo. El coeficiente de fricción cinética es μ = 0.3. Calcula la aceleración de la caja. (g = 9.8 m/s²)
+        </div>
+        <div class="ej-datos">
+          <div class="dato-item">F_aplicada = 120 N</div>
+          <div class="dato-item">m = 25 kg</div>
+          <div class="dato-item">μ = 0.3</div>
+          <div class="dato-item">g = 9.8 m/s²</div>
+        </div>
+        <div class="ej-solucion">
+          <h4>▸ Solución</h4>
+          <div class="paso"><span class="paso-n">1.</span><span class="paso-texto">Calcular la fuerza Normal (plano horizontal, sin ángulo): <span class="paso-formula">N = m · g = 25 × 9.8 = 245 N</span></span></div>
+          <div class="paso"><span class="paso-n">2.</span><span class="paso-texto">Calcular la fuerza de fricción cinética: <span class="paso-formula">f = μ · N = 0.3 × 245 = 73.5 N</span></span></div>
+          <div class="paso"><span class="paso-n">3.</span><span class="paso-texto">Calcular la fuerza neta en dirección horizontal: <span class="paso-formula">F_neta = F − f = 120 − 73.5 = 46.5 N</span></span></div>
+          <div class="paso"><span class="paso-n">4.</span><span class="paso-texto">Aplicar la 2ª Ley de Newton: <span class="paso-formula">a = F_neta / m = 46.5 / 25 = 1.86 m/s²</span></span></div>
+          <div class="respuesta-final">R: La aceleración de la caja es 1.86 m/s² en la dirección de la fuerza aplicada.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejercicio 3 -->
+    <div class="ejercicio-item">
+      <div class="ejercicio-header">
+        <div class="ej-num">3</div>
+        <div class="ej-titulo">Sistema de dos bloques conectados — Tensión</div>
+        <div class="ej-ley">3ª Ley · Acción–Reacción</div>
+      </div>
+      <div class="ejercicio-body">
+        <div class="ej-enunciado">
+          Dos bloques (A = 8 kg y B = 12 kg) están conectados por una cuerda inextensible y sin masa. Se aplica una fuerza de 100 N sobre el bloque B en una superficie sin fricción. Halla: (a) la aceleración del sistema y (b) la tensión en la cuerda entre ambos bloques. ¿Qué ley explica que la cuerda ejerce igual tensión en ambos bloques?
+        </div>
+        <div class="ej-datos">
+          <div class="dato-item">m_A = 8 kg</div>
+          <div class="dato-item">m_B = 12 kg</div>
+          <div class="dato-item">F = 100 N</div>
+          <div class="dato-item">μ = 0 (sin fricción)</div>
+        </div>
+        <div class="ej-solucion">
+          <h4>▸ Solución</h4>
+          <div class="paso"><span class="paso-n">1.</span><span class="paso-texto">Masa total del sistema: <span class="paso-formula">m_total = 8 + 12 = 20 kg</span></span></div>
+          <div class="paso"><span class="paso-n">2.</span><span class="paso-texto">Aceleración del sistema (2ª Ley): <span class="paso-formula">a = F / m_total = 100 / 20 = 5 m/s²</span></span></div>
+          <div class="paso"><span class="paso-n">3.</span><span class="paso-texto">Tensión en la cuerda (analizando solo el bloque A): <span class="paso-formula">T = m_A · a = 8 × 5 = 40 N</span></span></div>
+          <div class="paso"><span class="paso-n">4.</span><span class="paso-texto">La <strong>3ª Ley</strong> garantiza que la cuerda ejerce 40 N sobre A hacia adelante y 40 N sobre B hacia atrás — igual magnitud, dirección opuesta, sobre cuerpos distintos.</span></div>
+          <div class="respuesta-final">R: (a) a = 5 m/s² · (b) T = 40 N. La 3ª Ley de Newton explica el par acción–reacción en la cuerda.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RECURSOS VISUALES Y VIDEOS -->
+<section id="recursos">
+  <div class="container">
+    <div class="section-label">05 · Recursos Visuales y Videos</div>
+    <h2 class="section-title" style="color:var(--blanco);">Videos y Aplicaciones Prácticas</h2>
+    <p class="section-intro">Selección de videos que ilustran las Leyes de Newton con aplicaciones reales, experimentos y curiosidades científicas.</p>
+
+    <div class="videos-grid">
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=kKKM8Y-u7ds" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">1ª Ley · Inercia</div>
+          <div class="video-title">Experimento del mantel: inercia en acción</div>
+          <div class="video-desc">Demostración clásica que ilustra la 1ª Ley de Newton con objetos cotidianos.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=ou9UWvlDNBI" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">2ª Ley · F = ma</div>
+          <div class="video-title">Cohetes y la Segunda Ley de Newton</div>
+          <div class="video-desc">Cómo la NASA aplica F = ma en el diseño de cohetes y propulsión espacial.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=pRQwB6u-JXQ" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">3ª Ley · Acción–Reacción</div>
+          <div class="video-title">Por qué los cohetes funcionan en el espacio</div>
+          <div class="video-desc">Explicación visual de la 3ª Ley en el vacío espacial donde no hay apoyo externo.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=NM5hDFqbChM" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">Aplicación Real</div>
+          <div class="video-title">Leyes de Newton en los deportes</div>
+          <div class="video-desc">Fútbol, atletismo y natación explicados con dinámica newtoniana.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=_Nr0RQLKmPs" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">Experimento</div>
+          <div class="video-title">Caída libre y la gravedad — NASA</div>
+          <div class="video-desc">El experimento de la pluma y el martillo en la Luna: sin fricción, todo cae igual.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <a href="https://www.youtube.com/watch?v=BLuI118nhzc" target="_blank" class="video-play">▶</a>
+        </div>
+        <div class="video-card-body">
+          <div class="video-tag">Curiosidad Científica</div>
+          <div class="video-title">Leyes de Newton en un accidente de tránsito</div>
+          <div class="video-desc">Análisis físico de qué ocurre en un choque: inercia, fuerzas y sistemas de seguridad.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-title">Dinámica: Leyes de Newton</div>
+  <p>Proyecto Grupal · Física · Bachillerato · Fecha de Entrega: 4 de junio de 2026</p>
+  <p style="margin-top:0.5rem;">Herramientas de Newton — Principia Mathematica, 1687</p>
+</footer>
+
+</body>
+</html>
