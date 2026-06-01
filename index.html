@@ -629,32 +629,172 @@
     </div>
 
 <div class="mentefacto-section">
-      <h3>Mentefacto Modal</h3>
-      <p class="sub">Estructura proposicional básica que define conceptualmente la Dinámica</p>
-      <div class="mf-modal">
-        <center>
-          <div class="mf-modal-proposition">
-            La dinámica es la rama de la física que estudia el movimiento de los cuerpos
-          </div>
-        </center>
-        <div class="mf-modal-diagram">
-          <div class="mf-modal-top">
-            <div class="mf-modal-class">rama de la fisica</div>
-          </div>
-          <div class="mf-modal-flow">
-            <div class="mf-modal-concept">dinamica</div>
-            <div class="mf-modal-arrow-container">
-              <div class="mf-modal-verb">estudiar</div>
-              <div class="mf-modal-arrow"></div>
-            </div>
-            <div class="mf-modal-concept">movimiento cuerpos</div>
-          </div>
+  <h3>Mentefacto Modal</h3>
+  <p class="sub">Estructura proposicional básica que define conceptualmente la Dinámica</p>
+  
+  <div class="mf-modal-container">
+    <p class="mf-modal-frase">La dinámica es la rama de la física que estudia el movimiento de los cuerpos</p>
+    
+    <div class="mf-modal-diagrama">
+      <div class="mf-modal-col">
+        <div class="mf-modal-rectangulo">rama de la fisica</div>
+        <div class="mf-modal-circulo">dinamica</div>
+      </div>
+      
+      <div class="mf-modal-flecha-container">
+        <div class="mf-modal-flecha">
+          <span>estudiar</span>
+          <div class="flecha-punta"></div>
+        </div>
+      </div>
+      
+      <div class="mf-modal-col">
+        <div class="mf-modal-circulo">
+          movimiento <span class="subrayado">cuerpos</span>
         </div>
       </div>
     </div>
-
   </div>
-</section>
+</div>
+
+<style>
+  .mf-modal-container {
+    background: var(--blanco);
+    border-radius: 10px;
+    padding: 2.5rem;
+    box-shadow: var(--sombra);
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  
+  .mf-modal-frase {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+    color: var(--negro);
+  }
+  
+  .mf-modal-diagrama {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 1rem;
+  }
+  
+  .mf-modal-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  /* Formas Geométricas según el bosquejo */
+  .mf-modal-rectangulo {
+    border: 4px solid var(--negro);
+    padding: 0.8rem 1.5rem;
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-align: center;
+    background: var(--blanco);
+    min-width: 180px;
+  }
+  
+  .mf-modal-circulo {
+    border: 4px solid var(--negro);
+    border-radius: 50%;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-align: center;
+    background: var(--blanco);
+    line-height: 1.3;
+  }
+  
+  .subrayado {
+    border-bottom: 3px solid var(--negro);
+    display: inline-block;
+    padding-bottom: 2px;
+    margin-top: 2px;
+  }
+  
+  /* Construcción de la Flecha CSS estilo bloque */
+  .mf-modal-flecha-container {
+    display: flex;
+    align-items: center;
+    height: 160px; /* Alineado con la altura de los círculos */
+  }
+  
+  .mf-modal-flecha {
+    position: relative;
+    background: var(--blanco);
+    border: 4px solid var(--negro);
+    border-right: none;
+    padding: 0.6rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.95rem;
+    min-width: 120px;
+    height: 50px;
+  }
+  
+  .mf-modal-flecha .flecha-punta {
+    position: absolute;
+    right: -29px;
+    top: -4px;
+    width: 0;
+    height: 0;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    border-left: 25px solid var(--negro);
+  }
+  
+  .mf-modal-flecha .flecha-punta::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    top: -21px;
+    width: 0;
+    height: 0;
+    border-top: 21px solid transparent;
+    border-bottom: 21px solid transparent;
+    border-left: 21px solid var(--blanco);
+  }
+
+  /* Ajuste responsivo para celulares */
+  @media (max-width: 768px) {
+    .mf-modal-diagrama {
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+    .mf-modal-flecha-container {
+      height: auto;
+    }
+    .mf-modal-flecha .flecha-punta {
+      transform: rotate(90deg);
+      right: calc(50% - 12px);
+      top: 42px;
+    }
+    .mf-modal-flecha {
+      border-right: 4px solid var(--negro);
+      border-bottom: none;
+    }
+    .mf-modal-flecha .flecha-punta::after {
+      right: 4px;
+      top: -21px;
+    }
+  }
+</style>
 
 <section id="ejercicios">
   <div class="container">
